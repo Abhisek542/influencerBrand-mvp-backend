@@ -1,6 +1,6 @@
 package com.abhi.influencermvp.exception;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
 
 @Data
