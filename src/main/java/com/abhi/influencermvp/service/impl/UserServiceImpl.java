@@ -1,5 +1,6 @@
 package com.abhi.influencermvp.service.impl;
 import com.abhi.influencermvp.config.JwtUtil;
+import com.abhi.influencermvp.dto.LoginResponseDto;
 import com.abhi.influencermvp.entity.Campaign;
 import com.abhi.influencermvp.entity.User;
 import com.abhi.influencermvp.dto.UserDto;
@@ -42,21 +43,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public  String loginUser(UserDto dto){
+    public LoginResponseDto loginUser(UserDto dto){
 
-        Optional<User> user = userRepository.findByEmail(dto.getEmail());
-        if(user.isPresent()){
-            if(dto.getPassword().equals(user.get().getPassword())){
-
-                String token = jwtUtil.generateToken(dto.getEmail(),user.get().getRole());
-                System.out.println(token);
-                return "User Logged Successfully. Token: "+ token;
-            }
-            else {
-                return "Wrong Password";
-            }
+        LoginResponseDto loginResponseDto = new LoginResponseDto();
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(()-> new RuntimeException("Email does not exist"));
+        if(!dto.getPassword().equals(user.getPassword())){
+            throw  new RuntimeException("Wrong password");
         }
-        return "Email does not exist";
+
+        String token = jwtUtil.generateToken(user.getEmail(),user.getRole());
+
+        loginResponseDto.setToken(token);
+        loginResponseDto.setRole(user.getRole().toString());
+        return loginResponseDto;
 
     }
 

@@ -9,5 +9,8 @@ public class BrandDashboardDto {
     private long activeCampaigns;
     private long expiredCampaigns;
     private double totalBudget;
+    private long totalApplications;
+    private long pendingApplications;
+    private long acceptedApplications;
 
 }

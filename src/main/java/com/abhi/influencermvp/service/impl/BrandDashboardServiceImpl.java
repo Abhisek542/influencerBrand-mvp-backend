@@ -2,7 +2,9 @@ package com.abhi.influencermvp.service.impl;
 
 import com.abhi.influencermvp.dto.BrandDashboardDto;
 import com.abhi.influencermvp.entity.Campaign;
+import com.abhi.influencermvp.enums.ApplicationStatus;
 import com.abhi.influencermvp.repository.BranDashboardRepo;
+import com.abhi.influencermvp.repository.CampaignApplicationRepository;
 import com.abhi.influencermvp.repository.CampaignRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,8 @@ public class BrandDashboardServiceImpl implements BrandDashboardService {
     CampaignRepository campaignRepository;
     @Autowired
     BranDashboardRepo brandDashboardRepo;
+    @Autowired
+    CampaignApplicationRepository campaignApplicationRepository;
 
     public BrandDashboardDto getBrandDashboard(String email) {
 
@@ -31,7 +35,7 @@ public class BrandDashboardServiceImpl implements BrandDashboardService {
         double totalBudget = 0;
         for (Campaign c : campaigns) {
 
-            String deadline = c.getDeadline();
+            String deadline = String.valueOf(LocalDate.parse(c.getDeadline()));
             if(deadline != null && !deadline.isEmpty()) {
 
                 LocalDate deadlineDate = LocalDate.parse(deadline);
@@ -53,6 +57,9 @@ public class BrandDashboardServiceImpl implements BrandDashboardService {
        dto.setTotalBudget(totalBudget);
         dto.setActiveCampaigns(active);
         dto.setExpiredCampaigns(expired);
+
+     /*   dto.setTotalApplications(campaignApplicationRepository.countByCampaignCreatedBy(email));
+        dto.setPendingApplications(campaignApplicationRepository.countByCreatedByAndStatus(email, ApplicationStatus.PENDING));*/
 
         return dto;
     }

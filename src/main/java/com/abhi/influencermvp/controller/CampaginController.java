@@ -31,6 +31,8 @@ public class CampaginController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('BRAND')")
     public String createCampaign(@Valid @RequestBody Campaign campaign) {
+
+        System.out.println("CAMPAIGN RECEIVED → " + campaign);
         String email = Objects.requireNonNull(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).toString();
 
         return campaignService.createCampaign(email, campaign);

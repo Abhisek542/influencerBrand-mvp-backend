@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -36,9 +37,10 @@ public class CampaignServiceImpl implements CampaignService {
         Page<Campaign> campaigns= campaignRepository.findAll(pageable);
         return campaigns.map(campaign -> {
 
+            String deadline = String.valueOf(LocalDate.parse(campaign.getDeadline()));
             CampaignResponseDto campaignResponseDto = new CampaignResponseDto();
             campaignResponseDto.setId(campaign.getId());
-            campaignResponseDto.setDeadline(campaign.getDeadline());
+            campaignResponseDto.setDeadline(deadline);
             campaignResponseDto.setTitle(campaign.getTitle());
             campaignResponseDto.setDescription(campaign.getDescription());
             campaignResponseDto.setBrandName(campaign.getBrandName());
@@ -54,12 +56,13 @@ public class CampaignServiceImpl implements CampaignService {
        Campaign campaign = campaignRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Campaign not found!"));
 
        CampaignResponseDto dto = new CampaignResponseDto();
+        String deadline = String.valueOf(LocalDate.parse(campaign.getDeadline()));
        dto.setId(campaign.getId());
        dto.setNiche(campaign.getNiche());
        dto.setBudget(campaign.getBudget());
        dto.setTitle(campaign.getTitle());
        dto.setDescription(campaign.getDescription());
-       dto.setDeadline(campaign.getDeadline());
+       dto.setDeadline(deadline);
        dto.setBrandName(campaign.getBrandName());
 
        return dto;
@@ -129,6 +132,7 @@ public class CampaignServiceImpl implements CampaignService {
                     return true;
                 })
                 .map(c -> {
+                    String deadline = String.valueOf(LocalDate.parse(c.getDeadline()));
                     CampaignResponseDto dto = new CampaignResponseDto();
                     dto.setId(c.getId());
                     dto.setTitle(c.getTitle());
@@ -136,7 +140,7 @@ public class CampaignServiceImpl implements CampaignService {
                     dto.setBrandName(c.getBrandName());
                     dto.setBudget(c.getBudget());
                     dto.setNiche(c.getNiche());
-                    dto.setDeadline(c.getDeadline());
+                    dto.setDeadline(deadline);
                     return dto;
                 })
                 .toList();

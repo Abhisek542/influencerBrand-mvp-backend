@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,12 +59,13 @@ public class InfluencerDashboardServiceImpl implements InfluencerDashboardServic
                     Campaign campaign = campaignRepository.findById(app.getCampaignId()).orElse(null);
 
                     if(campaign!=null){
+                        String deadline = String.valueOf(LocalDate.parse(campaign.getDeadline()));
                         MyApplicationDto dto = new MyApplicationDto();
                         dto.setCampaignId(campaign.getId());
                         dto.setBrandName(campaign.getBrandName());
                         dto.setStatus(app.getStatus());
                         dto.setMessage(app.getMessage());
-                        dto.setDeadline(campaign.getDeadline());
+                        dto.setDeadline(deadline);
                         return dto;
                     }
                     else{
