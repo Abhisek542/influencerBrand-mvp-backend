@@ -43,4 +43,10 @@ public class BrandApplicationController {
 
         return campaignApplicationService.getAcceptedInfluencers(email,campaignId);
     }
+    @DeleteMapping("/{applicationId}/deleted")
+    @PreAuthorize("hasRole('BRAND')")
+    public String deleteCampaign(@PathVariable int applicationId) {
+        String email = Objects.requireNonNull(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).toString();
+        return campaignApplicationService.deleteCampaignApplication(email,applicationId);
+    }
 }

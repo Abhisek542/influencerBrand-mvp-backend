@@ -28,5 +28,9 @@ public class CampaignApplication {
     private ApplicationStatus status=ApplicationStatus.PENDING;
 
     private LocalDateTime appliedAt = LocalDateTime.now();
+    private String niche;
+    private String platform;
+    private String influencerName;
+
 
 }

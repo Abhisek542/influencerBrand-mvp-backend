@@ -9,11 +9,12 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface CampaignApplicationService {
-    String applyToCampaign(String email, int campaignId, String message);
+    String applyToCampaign(String email, int campaignId, String message,String influencerName,String niche,String platform);
     List<CampaignApplication> getMyApplications(String email);
     List<CampaignApplication> getApplicationsForCampaign(String brandEmail, int campaignId);
     String UpdateCampaignApplicationsStatus(String brandEmail, int campaignId, ApplicationStatus status);
     List<CampaignApplication> getAcceptedInfluencers(String brandEmail, int campaignId);
+    String deleteCampaignApplication(String brandEmail, int applicationId);
 
 
 }

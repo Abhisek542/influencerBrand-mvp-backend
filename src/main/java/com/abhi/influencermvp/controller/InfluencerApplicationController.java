@@ -1,5 +1,6 @@
 package com.abhi.influencermvp.controller;
 
+import com.abhi.influencermvp.dto.ApplicationRequestDTO;
 import com.abhi.influencermvp.entity.CampaignApplication;
 import com.abhi.influencermvp.service.impl.CampaignApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,10 @@ public class InfluencerApplicationController {
 
     @PostMapping("/apply/{id}")
     @PreAuthorize("hasRole('INFLUENCER')")
-    public String applyCampaign(@PathVariable int id, @RequestParam(required = false) String message) {
+    public String applyCampaign(@PathVariable int id, @RequestBody ApplicationRequestDTO applicationRequest) {
 
         String email = Objects.requireNonNull(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).toString();
-        return campaignApplicationService.applyToCampaign(email,id,message);
+        return campaignApplicationService.applyToCampaign(email,id,applicationRequest.message(),applicationRequest.influencerName(),applicationRequest.niche(),applicationRequest.platform());
     }
 
     @GetMapping("/applications")

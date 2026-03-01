@@ -23,7 +23,7 @@ public class CampaignApplicationServiceImpl implements CampaignApplicationServic
 
     //This method for Influencer->apply to campaign
     @Override
-    public String applyToCampaign(String email, int campaignId, String message) {
+    public String applyToCampaign(String email, int campaignId, String message,String influencerName,String niche,String platform) {
         Campaign campaign = campaignRepository.findById(campaignId).orElseThrow(()->new ResourceNotFoundException("Campaign not found"));
 
         //check already applied or not
@@ -34,6 +34,9 @@ public class CampaignApplicationServiceImpl implements CampaignApplicationServic
 
         CampaignApplication app = new CampaignApplication();
         app.setCampaignId(campaignId);
+        app.setInfluencerName(influencerName);
+        app.setNiche(niche);
+        app.setPlatform(platform);
         app.setMessage(message);
         app.setInfluencerEmail(email);
         app.setStatus(ApplicationStatus.PENDING);
@@ -93,6 +96,19 @@ public class CampaignApplicationServiceImpl implements CampaignApplicationServic
         }
 
         return campaignApplicationRepository.findByCampaignIdAndStatus(campaignId,ApplicationStatus.ACCEPTED);
+    }
+
+    @Override
+    public String deleteCampaignApplication(String brandEmail, int applicationId) {
+
+        CampaignApplication campaignApplication = campaignApplicationRepository.findById(applicationId).orElseThrow(()->new RuntimeException("Application not found"));
+
+        Campaign campaign =  campaignRepository.findById(campaignApplication.getCampaignId()).orElseThrow(()->new ResourceNotFoundException("Campaign not found"));
+        if(!campaign.getCreatedBy().equals(brandEmail)){
+            throw new RuntimeException("Not authorizes");
+        }
+        campaignApplicationRepository.delete(campaignApplication);
+        return "Application has been deleted";
     }
 
 }
