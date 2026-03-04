@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/influencer")
+@RequestMapping("/api/influencers")
 public class InfluencerDashboardController {
     @Autowired
     private InfluencerDashboardService influencerDashboardService;

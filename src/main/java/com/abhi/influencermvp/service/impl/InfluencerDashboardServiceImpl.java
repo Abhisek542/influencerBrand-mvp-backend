@@ -62,6 +62,7 @@ public class InfluencerDashboardServiceImpl implements InfluencerDashboardServic
                         String deadline = String.valueOf(LocalDate.parse(campaign.getDeadline()));
                         MyApplicationDto dto = new MyApplicationDto();
                         dto.setCampaignId(campaign.getId());
+                        dto.setCampaignTitle(campaign.getTitle());
                         dto.setBrandName(campaign.getBrandName());
                         dto.setStatus(app.getStatus());
                         dto.setMessage(app.getMessage());

@@ -17,7 +17,7 @@ public class BrandApplicationController {
 
     @Autowired
     private CampaignApplicationService campaignApplicationService;
-
+//
     @GetMapping("/{campaignId}")
     @PreAuthorize("hasRole('BRAND')")
     public List<CampaignApplication> getApplicationsForCampaign(@PathVariable int campaignId) {
@@ -26,7 +26,7 @@ public class BrandApplicationController {
 
         return campaignApplicationService.getApplicationsForCampaign(email, campaignId);
     }
-
+//
     @PostMapping("/{applicationId}/status")
     @PreAuthorize("hasRole('BRAND')")
     public String UpdateApplicationStatus(@PathVariable int applicationId, @RequestParam ApplicationStatus status) {
@@ -35,7 +35,7 @@ public class BrandApplicationController {
 
         return campaignApplicationService.UpdateCampaignApplicationsStatus(email, applicationId, status);
     }
-
+//
     @GetMapping("/{campaignId}/accepted")
     @PreAuthorize("hasRole('BRAND')")
     public List<CampaignApplication> getAcceptedCampaigns(@PathVariable int campaignId) {
@@ -49,4 +49,5 @@ public class BrandApplicationController {
         String email = Objects.requireNonNull(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).toString();
         return campaignApplicationService.deleteCampaignApplication(email,applicationId);
     }
+    //
 }
