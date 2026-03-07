@@ -12,4 +12,5 @@ import java.util.List;
 public interface CampaignRepository  extends JpaRepository<Campaign,Integer> {
 
     Page<Campaign> findByCreatedBy(String email, Pageable pageable);
+
 }

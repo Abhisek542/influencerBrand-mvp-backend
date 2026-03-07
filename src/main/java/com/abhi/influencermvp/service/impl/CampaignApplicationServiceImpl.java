@@ -27,7 +27,11 @@ public class CampaignApplicationServiceImpl implements CampaignApplicationServic
         Campaign campaign = campaignRepository.findById(campaignId).orElseThrow(()->new ResourceNotFoundException("Campaign not found"));
 
         //check already applied or not
-        boolean alreadyApplied = campaignApplicationRepository.findByInfluencerEmail(email).stream().anyMatch(a->a.getCampaignId()==campaignId);
+
+        boolean alreadyApplied =
+                campaignApplicationRepository
+                        .existsByInfluencerEmailAndCampaignId(email, campaignId);
+
         if(alreadyApplied){
             return "Your campaign has been already applied";
         }

@@ -1,6 +1,7 @@
 package com.abhi.influencermvp.service.impl;
 
 import com.abhi.influencermvp.dto.CampaignResponseDto;
+import com.abhi.influencermvp.dto.PageResponse;
 import com.abhi.influencermvp.entity.Campaign;
 import com.abhi.influencermvp.entity.CampaignApplication;
 import com.abhi.influencermvp.exception.ResourceNotFoundException;
@@ -113,7 +114,7 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
-    public Page<CampaignResponseDto> filterCampaigns(String title,String niche,String brandName,Double minBudget,Double maxBudget,int page,int size) {
+    public PageResponse<CampaignResponseDto> filterCampaigns(String title,String niche,String brandName,Double minBudget,Double maxBudget,int page,int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -145,7 +146,7 @@ public class CampaignServiceImpl implements CampaignService {
                 })
                 .toList();
 
-        return new PageImpl<>(filtered, pageable, campaigns.getTotalElements());
+        return new PageResponse<>(filtered, page,size,campaigns.getTotalElements(),campaigns.getTotalPages());
     }
 
 

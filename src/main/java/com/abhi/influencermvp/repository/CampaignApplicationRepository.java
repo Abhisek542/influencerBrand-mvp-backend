@@ -15,6 +15,7 @@ public interface CampaignApplicationRepository  extends CrudRepository<CampaignA
     List<CampaignApplication> findByInfluencerEmail(String email);
     List<CampaignApplication> findByCampaignId(int campaignId);
     List<CampaignApplication> findByCampaignIdAndStatus(int campaignId, ApplicationStatus status);
+    boolean existsByInfluencerEmailAndCampaignId(String email, int campaignId);
     /*long countByCampaignCreatedBy(String email);
     long countByCreatedByAndStatus(String email, ApplicationStatus status);*/
 

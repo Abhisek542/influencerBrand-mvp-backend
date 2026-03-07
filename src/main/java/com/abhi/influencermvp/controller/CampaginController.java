@@ -1,6 +1,7 @@
 package com.abhi.influencermvp.controller;
 
 import com.abhi.influencermvp.dto.CampaignResponseDto;
+import com.abhi.influencermvp.dto.PageResponse;
 import com.abhi.influencermvp.entity.Campaign;
 import com.abhi.influencermvp.entity.CampaignApplication;
 import com.abhi.influencermvp.service.impl.CampaignApplicationService;
@@ -73,7 +74,7 @@ public class CampaginController {
         return campaignService.updateCampaign(id,email,updatedCampaign);
     }
     @GetMapping("/filtr")
-    public Page<CampaignResponseDto> filterCampaigns(@RequestParam(required = false)String title,@RequestParam(required = false)String niche,@RequestParam(required = false)String  brandName,@RequestParam(required = false)Double minBudget,@RequestParam(required = false)Double maxBudget,@RequestParam(required = false) CampaignApplication status,@RequestParam(defaultValue = "0")int page, @RequestParam(defaultValue = "5")int size) {
+    public PageResponse<CampaignResponseDto> filterCampaigns(@RequestParam(required = false)String title, @RequestParam(required = false)String niche, @RequestParam(required = false)String  brandName, @RequestParam(required = false)Double minBudget, @RequestParam(required = false)Double maxBudget, @RequestParam(required = false) CampaignApplication status, @RequestParam(defaultValue = "0")int page, @RequestParam(defaultValue = "50")int size) {
         return campaignService.filterCampaigns(title,niche,brandName, minBudget, maxBudget, page, size);
     }
 

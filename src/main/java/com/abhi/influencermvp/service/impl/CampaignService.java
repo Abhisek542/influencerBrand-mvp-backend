@@ -1,6 +1,7 @@
 package com.abhi.influencermvp.service.impl;
 
 import com.abhi.influencermvp.dto.CampaignResponseDto;
+import com.abhi.influencermvp.dto.PageResponse;
 import com.abhi.influencermvp.entity.Campaign;
 import com.abhi.influencermvp.repository.CampaignApplicationRepository;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,7 @@ public interface CampaignService {
     String deleteCampaign(String email, int id);
 
     String updateCampaign(int id, String email, Campaign updatedCampaign);
-    Page<CampaignResponseDto> filterCampaigns(String title,String niche,String brandName,Double minBudget,Double maxBudget,int page,int size);
+    PageResponse<CampaignResponseDto> filterCampaigns(String title, String niche, String brandName, Double minBudget, Double maxBudget, int page, int size);
 
 
 
