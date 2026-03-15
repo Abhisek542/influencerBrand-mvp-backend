@@ -28,6 +28,7 @@ public class Campaign {
     @NotBlank(message = "Deadline is required")
     private String deadline;
 
+
     @Column(name="created_by")
     private String createdBy;
 

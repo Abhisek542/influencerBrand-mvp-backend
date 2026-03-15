@@ -14,5 +14,7 @@ public class CampaignResponseDto {
     private String niche;
     private String deadline;
 
+    private  boolean applied; // adding for showing applied in browse campaigns
+
 
 }

@@ -7,12 +7,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
 
 @Component
-public class JwtAuthFilter implements Filter {
+public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
@@ -21,48 +22,52 @@ public class JwtAuthFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    protected void doFilterInternal(
+            HttpServletRequest req,
+            HttpServletResponse res,
+            FilterChain chain)
+            throws ServletException, IOException {
 
-        HttpServletRequest req = (HttpServletRequest) request;
+        String path = req.getRequestURI();
+
+        if (path.startsWith("/api/auth") || path.startsWith("/uploads")) {
+            chain.doFilter(req, res);
+            return;
+        }
+
         String authHeader = req.getHeader("Authorization");
 
-        // Allow login & register without token
-        if (req.getRequestURI().startsWith("/api/auth")) {
-            chain.doFilter(request, response);
-            return;
-        }
-
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-
-            unauthorized(response,"Missing or Invalid token");
+            unauthorized(res, "Missing or Invalid token");
             return;
         }
+
         String token = authHeader.substring(7);
 
         if (!jwtUtil.validateToken(token)) {
-            unauthorized(response, "Invalid Token");
+            unauthorized(res, "Invalid Token");
             return;
         }
+
         String email = jwtUtil.extractEmailFromToken(token);
         Role role = jwtUtil.extractRoleFromToken(token);
 
         UsernamePasswordAuthenticationToken auth =
-                new UsernamePasswordAuthenticationToken(email, null, List.of(()->"ROLE_"+role.name()));
+                new UsernamePasswordAuthenticationToken(
+                        email,
+                        null,
+                        List.of(() -> "ROLE_" + role.name())
+                );
 
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        chain.doFilter(request, response);
+        chain.doFilter(req, res);
+    }
 
-
-        }
-    private void unauthorized(ServletResponse response, String message) throws IOException {
-        HttpServletResponse res = (HttpServletResponse) response;
+    private void unauthorized(HttpServletResponse res, String message) throws IOException {
         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         res.getWriter().write(message);
     }
-
-
-    }
+}
 
 

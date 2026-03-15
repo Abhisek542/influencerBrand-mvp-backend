@@ -8,10 +8,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/influencer")
 public class UserProfileController {
 
     @Autowired
@@ -19,10 +20,11 @@ public class UserProfileController {
 
     @PostMapping("/profile/update")
     @PreAuthorize("hasRole('INFLUENCER')")
-    public String updateProfile(@RequestBody UserProfileDto dto) {
+    public Map<String, String> updateProfile(@RequestBody UserProfileDto dto) {
 
         String email= Objects.requireNonNull(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).toString();
-        return userProfileService.updateUserProfile(email, dto);
+         userProfileService.updateUserProfile(email, dto);
+        return Map.of("message", "Profile updated successfully");
     }
 
     @GetMapping("/profile/me")
@@ -32,13 +34,16 @@ public class UserProfileController {
         return userProfileService.getMyProfile(email);
    }
 
-   @PostMapping("/profile/upload-Image")
+   @PostMapping("/profile/upload-image")
    @PreAuthorize("hasRole('INFLUENCER')")
-   public String uploadImage(@RequestParam("image")   MultipartFile file) {
+   public Map<String, String> uploadImage(@RequestParam("file")   MultipartFile file) {
 
         String email= Objects.requireNonNull(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal()).toString();
 
-        return userProfileService.uploadImage(email,file);
+         userProfileService.uploadImage(email,file);
+
+       return Map.of("message", "Profile Image Uploaded Successfully");
    }
+
 
 }

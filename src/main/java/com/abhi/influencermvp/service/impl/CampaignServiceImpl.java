@@ -5,6 +5,7 @@ import com.abhi.influencermvp.dto.PageResponse;
 import com.abhi.influencermvp.entity.Campaign;
 import com.abhi.influencermvp.entity.CampaignApplication;
 import com.abhi.influencermvp.exception.ResourceNotFoundException;
+import com.abhi.influencermvp.repository.CampaignApplicationRepository;
 import com.abhi.influencermvp.repository.CampaignRepository;
 import com.abhi.influencermvp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +26,9 @@ public class CampaignServiceImpl implements CampaignService {
     private CampaignRepository campaignRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CampaignApplicationRepository campaignApplicationRepository;
 
     @Override
     public String createCampaign(String brandEmail, Campaign campaign) {
@@ -120,6 +125,8 @@ public class CampaignServiceImpl implements CampaignService {
 
         Page<Campaign> campaigns = campaignRepository.findAll(pageable);
 
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
         List<CampaignResponseDto> filtered = campaigns.getContent()
                 .stream()
                 .filter(c -> title == null || c.getTitle().toLowerCase().contains(title.toLowerCase()))
@@ -142,6 +149,10 @@ public class CampaignServiceImpl implements CampaignService {
                     dto.setBudget(c.getBudget());
                     dto.setNiche(c.getNiche());
                     dto.setDeadline(deadline);
+
+                    boolean applied = campaignApplicationRepository.existsByInfluencerEmailAndCampaignId(email, c.getId());
+
+                    dto.setApplied(applied);
                     return dto;
                 })
                 .toList();
