@@ -1,5 +1,6 @@
 package com.abhi.influencermvp.service.impl;
 import com.abhi.influencermvp.config.JwtUtil;
+import com.abhi.influencermvp.dto.ApiResponseDTO;
 import com.abhi.influencermvp.dto.LoginResponseDto;
 import com.abhi.influencermvp.entity.Campaign;
 import com.abhi.influencermvp.entity.User;
@@ -8,6 +9,8 @@ import com.abhi.influencermvp.dto.UserDto;
 import com.abhi.influencermvp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,24 +25,24 @@ public class UserServiceImpl implements UserService {
     private JwtUtil jwtUtil;
 
     @Override
-    public  String registerUser(UserDto dto){
+    public ResponseEntity<ApiResponseDTO> registerUser(UserDto dto){
 
-        if(userRepository.existsByEmail(dto.getEmail())){
-            return "Email Already Exists";
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)           // 409
+                    .body(new ApiResponseDTO("Email already exists", false));
         }
-      else {
 
-          User user = new User();
-          user.setName(dto.getName());
-          user.setEmail(dto.getEmail());
+        User user = new User();
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());           // ⚠️ hash this before saving
+        user.setRole(dto.getRole());
+        userRepository.save(user);
 
-        /*  String hashed = BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt());*/
-          user.setPassword(dto.getPassword());
-          user.setRole(dto.getRole());
-
-          userRepository.save(user);
-          return "User Registered Successfully";
-        }
+        return ResponseEntity
+                .status(HttpStatus.CREATED)               // 201
+                .body(new ApiResponseDTO("User registered successfully", true));
     }
 
     @Override
