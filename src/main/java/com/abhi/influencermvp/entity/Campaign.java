@@ -32,4 +32,7 @@ public class Campaign {
     @Column(name="created_by")
     private String createdBy;
 
+    @Column(nullable = false)
+    private Integer applied = 0;
+
 }
