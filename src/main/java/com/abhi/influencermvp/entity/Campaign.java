@@ -18,6 +18,7 @@ public class Campaign {
     @NotBlank(message = "Title is required")
     private String title;
     @NotBlank(message = "Description is required")
+    @Column(columnDefinition = "TEXT")
     private String description;
     @NotBlank(message = "Brand Name is required")
     private String brandName;

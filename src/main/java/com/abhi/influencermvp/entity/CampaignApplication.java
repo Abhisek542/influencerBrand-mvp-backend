@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "Campaign-Application")
+@Table(name = "campaign_application")
 @Data
 public class CampaignApplication {
 
